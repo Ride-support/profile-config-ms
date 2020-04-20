@@ -1,0 +1,189 @@
+#Test with: http://editor.swagger.io/
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservice for Authentication
+  description: Java + MySQL
+  license:
+    name: Software Architecture, 2020-I
+host: host:4000
+basePath: /ridesupport-profileconfig-ms/resources
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /cars:
+    post:
+      summary: Creates a new car
+      operationId: createCar
+      parameters:
+        - name: car
+          in: body
+          required: true
+          description: Car Object
+          schema:	
+            $ref: '#/definitions/CarInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all cars
+      operationId: getAllCars
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/CarsList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /cars/{platesNumber}:
+    get:
+      summary: Returns an car with the given plate
+      operationId: getCarByPlates
+      parameters:
+        - name: platesNumber
+          in: path
+          description: The plates of the car to be returned
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Car'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: Updates a car with the given plates
+      operationId: updateCar
+      parameters:
+        - name: platesNumber
+          in: path
+          description: The id of the user to be updated
+          required: true
+          type: string
+        - name: car
+          in: body
+          required: true
+          description: Car Object
+          schema:
+            $ref: '#/definitions/CarInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes a car with the given plates
+      operationId: deleteCar
+      parameters:
+        - name: platesNumber
+          in: path
+          description: The plates of the car to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+
+  # Car
+  Car:
+    type: object
+    properties:
+      platesNumber:
+        type: string
+      model:
+        type: string
+      brand:
+        type: string
+
+  CarInput:
+    type: object
+    properties:
+      platesNumber:
+        type: string
+      model:
+        type: string
+      brand:
+        type: string
+
+  CarsList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Car'
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - code
+    properties:
+      message:
+        type: string
+      code:
+        type: number
+      description:
+        type: object
