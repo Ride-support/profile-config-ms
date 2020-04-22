@@ -6,7 +6,7 @@ info:
   description: Java + MySQL
   license:
     name: Software Architecture, 2020-I
-host: host:4000
+host: host:4002
 basePath: /ridesupport-profileconfig-ms/resources
 schemes:
   - http

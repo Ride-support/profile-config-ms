@@ -3,7 +3,7 @@ services:
   ridesupport-profileconfig-ms:
     build: .
     ports:
-      - "4000:4000"
+      - "4002:4002"
     depends_on:
       ridesupport-profileconfig-db:
         condition: service_healthy
@@ -24,4 +24,4 @@ services:
       MYSQL_USER: sa
       MYSQL_PASSWORD: 2020i
     ports:
-      - "3306:3306"
+      - "3002:3306"

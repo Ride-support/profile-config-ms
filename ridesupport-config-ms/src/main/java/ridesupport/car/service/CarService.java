@@ -24,8 +24,10 @@ public class CarService {
         return entityManager.find(Car.class, plateNumber);
     }
 
-    public void createCar(Car car) {
+    public Car createCar(Car car) {
         entityManager.persist(car);
+        entityManager.flush();
+        return car;
     }
 
     public Car updateCar(String plateNumber, Car car) {
@@ -33,11 +35,13 @@ public class CarService {
         carToUpdate.setPlateNumber(car.getPlateNumber());
         carToUpdate.setModel(car.getModel());
         carToUpdate.setBrand(car.getBrand());
+        entityManager.merge(carToUpdate);
         return entityManager.merge(carToUpdate);
     }
 
-    public void deleteCar(String plateNumber) {
+    public String deleteCar(String plateNumber) {
         Car carToDelete = entityManager.find(Car.class, plateNumber);
         entityManager.remove(carToDelete);
+        return plateNumber;
     }
 }

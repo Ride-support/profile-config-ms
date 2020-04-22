@@ -5,7 +5,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
+import javax.ws.rs.core.Response.ResponseBuilder;
 import ridesupport.car.model.Car;
 import ridesupport.car.service.CarService;
 
@@ -14,6 +14,8 @@ import java.util.List;
 
 @Path("/cars")
 public class CarResource {
+
+    ResponseBuilder response;
 
     @Context
     UriInfo uriInfo;
@@ -28,27 +30,36 @@ public class CarResource {
 
     @GET
     @Path("{id}")
-    public Car getCarByPlates(@PathParam("id") String plateNumber) {
-        return carService.getCarByPlates(plateNumber);
+    public Response getCarByPlates(@PathParam("id") String plateNumber) {
+        Car car = carService.getCarByPlates(plateNumber);
+        response = Response.status(Response.Status.OK);
+        response.entity(car);
+        return response.build();
     }
 
     @POST
     public Response createCar(Car car) {
-        carService.createCar(car);
-        return Response.status(Response.Status.CREATED).build();
+        Car createdCar = carService.createCar(car);
+        response = Response.status(Response.Status.CREATED);
+        response.entity(createdCar);
+        return response.build();
     }
 
     @PUT
     @Path("{id}")
     public Response updateCar(@PathParam("id") String plateNumber, Car car) {
-        carService.updateCar(plateNumber, car);
-        return Response.status(Response.Status.NO_CONTENT).build();
+        Car updatedCar = carService.updateCar(plateNumber, car);
+        response = Response.status(Response.Status.OK);
+        response.entity(updatedCar);
+        return response.build();
     }
 
     @DELETE
     @Path("{id}")
     public Response deleteCar(@PathParam("id") String plateNumber) {
-        carService.deleteCar(plateNumber);
-        return Response.status(Response.Status.OK).build();
+        String deletedCarPlate = carService.deleteCar(plateNumber);
+        response = Response.status(Response.Status.OK);
+        response.entity(deletedCarPlate);
+        return response.build();
     }
 }

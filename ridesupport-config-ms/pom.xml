@@ -32,7 +32,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>sa-auth-ms</finalName>
+        <finalName>ridesupport-profileconfig-ms</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
